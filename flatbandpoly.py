@@ -85,6 +85,21 @@ def do_kagome():
     print(f'and their gcd is {g}.')
 
 
+def do_kagome_2():
+    # kagome lattice, alternative representation
+    z1, z2 = symbols('z1 z2')
+    p = fbpoly(Matrix([[0,1,1],[1,0,0],[1,0,0]]),
+                Matrix([[0,1,0],[0,0,0],[0,1,0]]), z1,
+                Matrix([[0,0,1],[0,0,1],[0,0,0]]), z2)
+
+    coeffs = p.coeffs()
+    g = gcd_list(coeffs)
+
+    print(f'the flat band polynomial is {p};')
+    print(f'its coefficients are {coeffs};')
+    print(f'and their gcd is {g}.')
+
+
 def do_octahedron():
     B = zeros(6,6)
     # two cones
@@ -128,13 +143,13 @@ def do_dice_twisted():
 
 
 def do_kagome_system():
-    # kagome lattice with unknown edge weights - x for intracell, y for intercell links
+    # kagome lattice with unknown edge weights
     z1, z2 = symbols('z1 z2')
-    x, y = symbols('x y')
-    p = fbpoly(Matrix([[0,x,x],[x,0,x],[x,x,0]]),
-                Matrix([[0,0,0],[y,0,0],[0,0,0]]), z1,
-                Matrix([[0,0,0],[0,0,0],[y,0,0]]), z2,
-                Matrix([[0,0,0],[0,0,0],[0,y,0]]), z1**(-1)*z2)
+    a, b, c, d, e, f = symbols('a b c d e f')
+    p = fbpoly(Matrix([[0,a,b],[a,0,c],[b,c,0]]),
+                Matrix([[0,0,0],[d,0,0],[0,0,0]]), z1,
+                Matrix([[0,0,0],[0,0,0],[e,0,0]]), z2,
+                Matrix([[0,0,0],[0,0,0],[0,f,0]]), z1**(-1)*z2)
 
     coeffs = p.coeffs()
     g = gcd_list(coeffs)
@@ -144,20 +159,20 @@ def do_kagome_system():
     print(f'their gcd is {g}.')
 
     # solve the systems of equations
-    sols = solve(coeffs, [x, y], dict=True)
-    print(f'solutions in general: {sols}')
+    # sols = solve(coeffs, [x, y], dict=True)
+    # print(f'solutions in general: {sols}')
 
 
 def do_dice_system():
     z1, z2 = symbols('z1 z2')
-    a, b, c, d, e, f, g = symbols('a b c d e f g')
-    p = fbpoly(Matrix([[0,a,b],[a,0,c],[b,c,0]]),
-              Matrix([[0,f,0],[0,0,0],[0,0,0]]), z1,
-              Matrix([[0,0,0],[d,0,0],[e,0,0]]), z2,
-              Matrix([[0,0,0],[0,0,0],[g,0,0]]), z1*z2)
+    a, b, c, d, e, f = symbols('a b c d e f')
+    p = fbpoly(Matrix([[0,a,b],[a,0,0],[b,0,0]]),
+              Matrix([[0,e,0],[0,0,0],[0,0,0]]), z1,
+              Matrix([[0,0,0],[c,0,0],[d,0,0]]), z2,
+              Matrix([[0,0,0],[0,0,0],[f,0,0]]), z1*z2)
 
     coeffs = p.coeffs()
-    g = gcd_list(c)
+    g = gcd_list(coeffs)
 
     print(f'the char.poly is {p}.')
     print(f'its coefficients are:')
@@ -166,12 +181,8 @@ def do_dice_system():
     print(f'their gcd is {g}')
 
     alpha = symbols('alpha')
-    newcoeffs = [ct.subs([(c,0)]) for ct in coeffs]
-    print(f'after substituting c=0:')
-    for ct in newcoeffs:
-        print(f'{ct}')
 
-    sols = solve(newcoeffs, [a, b, d, e, f, g], dict=True)
+    sols = solve(coeffs, [a, b, c, d, e, f], dict=True)
     print(f'solutions for general alpha: {sols}')
 
 
@@ -241,10 +252,11 @@ def do_diamond_general():
 
 if __name__=="__main__":
     # do_kagome()
+    # do_kagome_2()
     # do_octahedron()
     # do_dice_twisted()
     # do_kagome_system()
-    # do_dice_system()
+    do_dice_system()
 
     # do_lieb_extension()
     # do_diamond_general()
